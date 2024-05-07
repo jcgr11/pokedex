@@ -1,7 +1,12 @@
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `pokedex`
@@ -49,10 +54,13 @@ CREATE TABLE `pokemon` (
 -- Dumping data for table `pokemon`
 --
 
-INSERT INTO `pokemon` (`PokemonID`, `Name`, `Type_1`, `Type_2`, `Species`, `Height`, `Weight`, `Description`, `ImagePath`) VALUES
-(1, 'Bulbasaur', 1, NULL, 1, 0.7, 6.9, 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.', '/images/bulbasaur.png'),
-(2, 'Charmander', 2, NULL, 2, 0.6, 8.5, 'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.', '/images/charmander.png'),
-(5, 'Test 1', NULL, NULL, NULL, 10, 10, 'Test 1', NULL);
+INSERT INTO `pokemon` 
+(`PokemonID`, `Name`, `Type_1`, `Type_2`, `Species`, `Height`, `Weight`, `Description`, `ImagePath`) VALUES
+(1, 'Bulbasaur', 1, NULL, 1, 0.7, 6.9, 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.', 'C:\\programming\\sie557\\Pokedex_prototype\\sprite_images\\1.png'),
+(2, 'Charmander', 2, NULL, 2, 0.6, 8.5, 'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.', 'C:\\programming\\sie557\\Pokedex_prototype\\sprite_images\\2.png'),
+(3, 'Venusaur', 1, NULL, 3, 2.0, 100.0, 'The plant blooms when it is absorbing solar energy. It stays on the move to seek sunlight.', 'C:\\programming\\sie557\\Pokedex_prototype\\sprite_images\\3.png'),
+(4, 'Charizard', 2, 3, 2, 1.7, 90.5, 'Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally.', 'C:\\programming\\sie557\\Pokedex_prototype\\sprite_images\\4.png'),
+(5, 'Squirtle', 3, NULL, 4, 0.5, 9.0, 'After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.', 'C:\\programming\\sie557\\Pokedex_prototype\\sprite_images\\5.png');
 
 -- --------------------------------------------------------
 
@@ -215,3 +223,7 @@ ALTER TABLE `pokemon`
 ALTER TABLE `user`
   ADD CONSTRAINT `FavoritePokemon` FOREIGN KEY (`FavoritePokemon`) REFERENCES `pokemon` (`PokemonID`) ON DELETE SET NULL ON UPDATE NO ACTION;
 COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

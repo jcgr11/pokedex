@@ -1,17 +1,35 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from db_operations import load_pokemon, add_pokemon, register_user, check_user
+import threading
 
 
 def create_pokemon_tab(tab_control):
     pokemon_tab = ttk.Frame(tab_control)
 
     tree_frame = ttk.Frame(pokemon_tab)
-    tree_frame.pack(side="top", fill="both", expand=True)
+    tree_frame.pack(side="bottom", fill="both", expand=True)
 
     pokemon_tree = ttk.Treeview(
-        tree_frame, columns=(1, 2, 3, 4, 5), show="headings", height="5"
+        tree_frame,
+        columns=("ID", "Name", "Height", "Weight", "Description"),
+        show="headings",
+        height="5",
     )
+
+    pokemon_tree.column("ID", anchor="center", width=100, stretch=False)
+    pokemon_tree.column("Name", anchor="center", width=150, stretch=False)
+    pokemon_tree.column("Height", anchor="center", width=100, stretch=False)
+    pokemon_tree.column("Weight", anchor="center", width=100, stretch=False)
+    pokemon_tree.column(
+        "Description", anchor="w", width=250, stretch=True
+    )
+
+    pokemon_tree.heading("ID", text="ID")
+    pokemon_tree.heading("Name", text="Name")
+    pokemon_tree.heading("Height", text="Height")
+    pokemon_tree.heading("Weight", text="Weight")
+    pokemon_tree.heading("Description", text="Description")
 
     vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=pokemon_tree.yview)
     vsb.pack(side="right", fill="y")
@@ -20,18 +38,6 @@ def create_pokemon_tab(tab_control):
     hsb = ttk.Scrollbar(tree_frame, orient="horizontal", command=pokemon_tree.xview)
     hsb.pack(side="bottom", fill="x")
     pokemon_tree.configure(xscrollcommand=hsb.set)
-
-    pokemon_tree.heading(1, text="ID")
-    pokemon_tree.heading(2, text="Name")
-    pokemon_tree.heading(3, text="Height")
-    pokemon_tree.heading(4, text="Weight")
-    pokemon_tree.heading(5, text="Description")
-
-    pokemon_tree.column(1, anchor="center", width=30, stretch=False)
-    pokemon_tree.column(2, anchor="center", width=100, stretch=False)
-    pokemon_tree.column(3, anchor="center", width=50, stretch=False)
-    pokemon_tree.column(4, anchor="center", width=50, stretch=False)
-    pokemon_tree.column(5, anchor="w", width=100, stretch=True)
 
     pokemon_tree.pack(side="left", fill="both", expand=True)
 
@@ -54,22 +60,26 @@ def create_pokemon_tab(tab_control):
 
 
 def refresh_pokemon_data(tree):
-    try:
-        tree.delete(*tree.get_children())
-        for row in load_pokemon():
-            tree.insert(
-                "",
-                tk.END,
-                values=(
-                    row["PokemonID"],
-                    row["Name"],
-                    row["Height"],
-                    row["Weight"],
-                    row["Description"],
-                ),
-            )
-    except Exception as e:
-        messagebox.showerror("Error", str(e))
+    def db_task():
+        try:
+            tree.delete(*tree.get_children())
+            pokemon_data = load_pokemon()
+            for pokemon in pokemon_data:
+                tree.insert(
+                    "",
+                    tk.END,
+                    values=(
+                        pokemon["PokemonID"],
+                        pokemon["Name"],
+                        pokemon["Height"],
+                        pokemon["Weight"],
+                        pokemon["Description"],
+                    ),
+                )
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    threading.Thread(target=db_task).start()
 
 
 def create_entries(pokemon_tab):
@@ -118,10 +128,12 @@ def create_login_tab(tab_control):
 
 def create_register_tab(tab_control):
     register_tab = ttk.Frame(tab_control)
-    ttk.Label(register_tab, text="Username:").pack()
+
+    ttk.Label(register_tab, text="Create your Username:").pack()
     username_entry = ttk.Entry(register_tab)
     username_entry.pack()
-    ttk.Label(register_tab, text="Password:").pack()
+
+    ttk.Label(register_tab, text="Create your Password:").pack()
     password_entry = ttk.Entry(register_tab, show="*")
     password_entry.pack()
 
@@ -131,6 +143,7 @@ def create_register_tab(tab_control):
         command=lambda: register_user(username_entry.get(), password_entry.get()),
     )
     register_button.pack(pady=10)
+
     return register_tab
 
 
