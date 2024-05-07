@@ -21,9 +21,7 @@ def create_pokemon_tab(tab_control):
     pokemon_tree.column("Name", anchor="center", width=150, stretch=False)
     pokemon_tree.column("Height", anchor="center", width=100, stretch=False)
     pokemon_tree.column("Weight", anchor="center", width=100, stretch=False)
-    pokemon_tree.column(
-        "Description", anchor="w", width=250, stretch=True
-    )
+    pokemon_tree.column("Description", anchor="w", width=250, stretch=True)
 
     pokemon_tree.heading("ID", text="ID")
     pokemon_tree.heading("Name", text="Name")
